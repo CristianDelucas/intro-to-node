@@ -8,6 +8,8 @@ const app = express();
 app.use(express.json());
 
 app.use('/pets', PetController);
+
+
 app.use('*', (req,res) => res.status(401).json("Path not existing"));
 
 app.listen(3000, () => console.info(`Server is running in http://localhost:${PORT}`));
