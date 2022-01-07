@@ -27,11 +27,6 @@ app.use('/', loggingMiddleware);
 
 //Routes
 app.use('/pets', PetController);
-<<<<<<< HEAD
-
-
-app.use('*', (req,res) => res.status(401).json("Path not existing"));
-=======
 app.use('/customers', CustomerController);
 app.use('*',(req, res) => res.status(401).json("Path not existing"));
 
@@ -54,5 +49,4 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     .then(()=>{
         app.listen(3000, () => console.info(`Server is running in http://localhost:${PORT}`));
     });
->>>>>>> 4-connecting-to-mongo
 
