@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const AdminController = require('./admin/admin.controller');
 const CustomerController = require('./customer/customer.controller');
 const PetController = require('./pet/pet.controller');
 const { defaults } = require('./_shared/utils');
@@ -20,6 +21,7 @@ app.use(loggingMiddleware);
 // ROUTES
 app.use('/pets', PetController);
 app.use('/customers', CustomerController);
+app.use('/admin', AdminController);
 app.use('*', (req, res) => res.status(404).json("Path not existing"));
 
 // BASE ERROR HANDLER

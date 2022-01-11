@@ -29,7 +29,11 @@ class PetService {
         }
         await CustomerResolver.ownerExistsById(pet.owner);
 
-        return Pet.create(pet);
+        const created = await Pet.create(pet);
+
+        await CustomerResolver.addPetToCustomer(created._id, pet.owner);
+
+        
     }
 
     static async replace(id, pet) {

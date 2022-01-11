@@ -9,6 +9,12 @@ class CustomerResolver{
             throw error;
         }
     }
+
+    static async addPetToCustomer(petId, customerId){
+        const customer = await CustomerService.findOne(customerId);
+        customer.pets ? customer.pets.push(petId):[petId];
+        customer.save();
+    }
 }
 
 module.exports = CustomerResolver;
