@@ -35,6 +35,18 @@ AdminController.post('/', async (req, res, next) => {
     }
 })
 
+AdminController.post('/login', async (req, res, next) => {
+    try {
+        const {  email, password } = req.body;
+
+        const created = await AdminService.login({ email, password });
+
+        res.status(201).json(created);
+    } catch (error) {
+        next(error);
+    }
+})
+
 AdminController.put('/:id', async (req, res, next) => {
     try {
         const { name } = req.body;

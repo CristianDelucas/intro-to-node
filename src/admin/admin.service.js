@@ -1,5 +1,7 @@
 const StatusError = require("../_shared/error/status.error");
 const Admin = require("./admin.model");
+const bcrypt = require('bcrypt');
+const JwtUtils = require("../_shared/utils/jwt.utils");
 
 class AdminService {
 
@@ -18,7 +20,37 @@ class AdminService {
     }
 
     static async create(admin) {
-        return Admin.create(admin);
+
+
+        const found = await  Admin.findOne({email:admin.email});
+        
+        if(found){
+            throw new StatusError(404, `Admin with email <${admin.email}> already exists`);
+        }
+
+        const hashedPassword = await bcrypt.hash(admin.password,10);
+
+        return Admin.create({...admin, password: hashedPassword});
+    }
+
+    static async login(admin) {
+
+        const found = await  Admin.findOne({email:admin.email});
+        
+        if(!found){
+            throw new StatusError(404, `Admin not exists by email`);
+        }
+
+        const isValidPassword = await bcrypt.compare(admin.password,found.password);
+
+        if(!isValidPassword){
+            throw new StatusError(403, `Invalid credentials`);
+        }
+
+        const token = JwtUtils.generate(found._id,found.email);
+
+        return {token};
+        
     }
 
     static async replace(id, admin) {
