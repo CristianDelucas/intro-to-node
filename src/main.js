@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const AdminController = require('./admin/admin.controller');
 const CustomerController = require('./customer/customer.controller');
 const PetController = require('./pet/pet.controller');
+const logging = require('./_shared/middleware/login.middleware');
+const secured = require('./_shared/middleware/secured.middleware');
 const { defaults } = require('./_shared/utils');
 const app = express();
 
@@ -10,17 +12,14 @@ require('dotenv').config()
 
 const PORT = defaults(process.env.PORT, 3000);
 
-const loggingMiddleware = (req, res, next) => {
-    console.log(`[${req.method}] ${req.originalUrl}`);
-    next();
-};
+
 
 app.use(express.json());
-app.use(loggingMiddleware);
+app.use(logging);
 
 // ROUTES
 app.use('/pets', PetController);
-app.use('/customers', CustomerController);
+app.use('/customers', secured, CustomerController);
 app.use('/admin', AdminController);
 app.use('*', (req, res) => res.status(404).json("Path not existing"));
 

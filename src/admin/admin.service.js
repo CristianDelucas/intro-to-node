@@ -10,7 +10,9 @@ class AdminService {
     }
 
     static async findOne(id) {
-        const admin = await Admin.findById(id);
+
+        //lean es para devolver la version simplificada para poder usarlo.
+        const admin = await Admin.findById(id).lean();
 
         if (admin) {
             return admin;

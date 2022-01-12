@@ -4,6 +4,7 @@ const CustomerController = express.Router();
 
 CustomerController.get('/', async (req, res, next) => {
     try {
+        console.log(req.user);
         const customers = await CustomerService.find();
         res.json(customers);
     } catch (error) {
