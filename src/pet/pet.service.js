@@ -22,18 +22,31 @@ class PetService {
         throw new StatusError(404, `Pet with id <${id}> was not found`);
     }
 
-    static async create(pet) {
+    static async create(pet, file) {
+
+        
 
         if(!pet.owner){
             throw new StatusError(400,`Owner is required`);
         }
         await CustomerResolver.ownerExistsById(pet.owner);
 
-        const created = await Pet.create(pet);
+        
+
+        if(file){
+            const created = Pet.create({...pet, image: file.path});
+            await CustomerResolver.addPetToCustomer(created._id, pet.owner);
+            return created;
+        }else{
+            const created = Pet.create(pet);
+            await CustomerResolver.addPetToCustomer(created._id, pet.owner);
+            return created;
+        
+        }
 
         await CustomerResolver.addPetToCustomer(created._id, pet.owner);
 
-        
+        return created;
     }
 
     static async replace(id, pet) {

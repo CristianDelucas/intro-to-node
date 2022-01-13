@@ -1,4 +1,5 @@
 const express = require('express');
+const upload = require('../_shared/middleware/file.middleware');
 const PetService = require('./pet.service');
 const PetController = express.Router();
 
@@ -23,11 +24,11 @@ PetController.get('/:id', async (req, res, next) => {
     }
 });
 
-PetController.post('/', async (req, res, next) => {
+PetController.post('/', upload.single('image') , async (req, res, next) => {
     try {
         const { name, kind, owner } = req.body;
 
-        const created = await PetService.create({ name, kind, owner });
+        const created = await PetService.create({ name, kind, owner }, req.file);
 
         res.status(201).json(created);
     } catch (error) {

@@ -6,15 +6,22 @@ const PetController = require('./pet/pet.controller');
 const logging = require('./_shared/middleware/login.middleware');
 const secured = require('./_shared/middleware/secured.middleware');
 const { defaults } = require('./_shared/utils');
+const cloudinary = require('cloudinary').v2;
 const app = express();
 
 require('dotenv').config()
 
 const PORT = defaults(process.env.PORT, 3000);
 
-
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+})
 
 app.use(express.json());
+//para poder leer un formato distinto (en el tema de imagenes)
+app.use(express.urlencoded({extended:true}));
 app.use(logging);
 
 // ROUTES
